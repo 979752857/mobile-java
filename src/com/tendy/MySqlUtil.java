@@ -43,15 +43,15 @@ public class MySqlUtil {
         }
     }
 
-    public static int saveData(Connection conn, String phone, String href, int cityId, String status) {
+    public static int saveData(Connection conn, String phone, String href, Integer cityId, Integer businessId, String status, String tag, String remark) {
         Statement stmt = null;
         int num = 0;
         try{
             // 执行查询
             stmt = conn.createStatement();
             String sql;
-            sql = "INSERT INTO `account_phone` (`phone`, `url`, `city_id`, `status`, `create_time`) " +
-                    "VALUES ('"+phone+"', '"+href+"', '"+cityId+"', '"+status+"', now()) on DUPLICATE key update `url`='"+href+"'," +
+            sql = "INSERT INTO `user_account_phone_test` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) " +
+                    "VALUES ('"+phone+"', '"+href+"', '"+businessId+"', '"+cityId+"', '"+tag+"', '"+status+"', now(), now(), "+"'"+remark+"') on DUPLICATE key update `url`='"+href+"'," +
                     "`update_time`=now();";
             num = stmt.executeUpdate(sql);
             stmt.close();
