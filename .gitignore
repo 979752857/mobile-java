@@ -1,0 +1,13 @@
+/.gradle/
+.idea
+.settings
+.classpath
+.project
+.svn
+*.iml
+.DS_Store
+/bin/
+/build/
+/classes/
+/src/com/tendy/DBConstants.java
+/out/
