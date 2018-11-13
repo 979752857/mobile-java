@@ -11,23 +11,15 @@ import java.util.Map;
  * @Description:
  * @Date: 2018/10/31
  */
-public class HenanPhone {
+public class HenanPhone extends Phone{
 
     private static String server = "http://wap.ha.10086.cn/pay/card-sale!toforward.action?url=card&mealid=&mastercard=&plancode=&iccid=";
-    private static String html = "<li class=\"tc bgc-fafafa\" data-plancode=\"XWAPCARDNCS\" data-region=\"R\" data-card=\"13683914884\" data-page=\"9\" style=\"display:none;\" >\n" +
-            "                            <a href=\"javascript:void(0);\">\n" +
-            "                                <p>13683914884</p>\n" +
-            "                            </a>\n" +
-            "                        </li>";
-    private static int updateNum = 0;
-    private static int successNum = 0;
-    private static int failNum = 0;
 
-    public static void main(String[] args) {
-        getPhoneAndHref(0);
+    public HenanPhone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId) {
+        super(pageSize, pageStart, pageEnd, cityId, businessId);
     }
 
-    public static void getPhoneAndHref(int row){
+    public void getPhoneAndHref(int row) throws InterruptedException {
         Map<String, String> param = new HashMap<>();
         param.put("queryRegion", "R");
         param.put("sumpage", "0");
@@ -39,10 +31,10 @@ public class HenanPhone {
         processHtmlAndHref(result, row);
     }
 
-    public static void processHtmlAndHref(String result, int row){
-        List<Map<String, String>> list = new ArrayList<>();
+    public void processHtmlAndHref(String result, int row) throws InterruptedException {
+        List<UserAccountPhone> list = new ArrayList<>();
+        Connection connection = MySqlUtil.getConnect();
         while(true){
-            Map<String, String> map = new HashMap<>();
             result = result.trim();
             int index = result.indexOf("class=\"tc bgc-fafafa\"");
             if(index < 0){
@@ -64,17 +56,39 @@ public class HenanPhone {
                     }
                 }
             }
-            map.put("phone", phone);
-            map.put("plancode", plancode);
-            list.add(map);
             ItemRule itemRule = MobileRule.checkPhone(phone);
+            String tag = "";
+            String remark = "";
             if(itemRule != null){
-                System.out.println("*************phone:"+phone+"*************");
+                tag = itemRule.getTag();
+                remark = itemRule.getRemark();
             }
-            successNum++;
-            System.out.println("phone:"+phone+"   plancode:"+plancode+"   successNum:"+successNum);
+            UserAccountPhone userAccountPhone = new UserAccountPhone();
+            userAccountPhone.setPhone(phone);
+            userAccountPhone.setBusinessId(getBusinessId());
+            userAccountPhone.setUrl(plancode);
+            userAccountPhone.setStatus("private");
+            userAccountPhone.setCityId(getCityId());
+            userAccountPhone.setTag(tag);
+            userAccountPhone.setRemark(remark);
+            list.add(userAccountPhone);
+            System.out.println(phone + "   plancode:" + plancode + "    row:"+row+"   放入list");
         }
-
+        if(list != null && list.size() > 0){
+            int num = MySqlUtil.saveDataBatch(connection, list);
+            if(num > 1){
+                setUpdateNum(getUpdateNum()+1);
+                System.out.println("list:"+list.size()+"   处理成功");
+            }else{
+                setFailNum(getFailNum()+1);
+                System.out.println("list:"+list.size()+"   处理失败");
+            }
+        }
+        MySqlUtil.closeConnection(connection);
     }
 
+    @Override
+    public void execute(Integer pageStart) throws Exception {
+        getPhoneAndHref(0);
+    }
 }

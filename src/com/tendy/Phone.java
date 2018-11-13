@@ -22,7 +22,7 @@ public abstract class Phone {
         this.failNum = 0;
     }
 
-    public abstract void execute(Integer pageStart);
+    public abstract void execute(Integer pageStart) throws Exception;
 
     public Integer getPageSize() {
         return pageSize;

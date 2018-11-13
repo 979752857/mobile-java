@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 /**
  * @Author: tendy
@@ -54,6 +55,42 @@ public class MySqlUtil {
                     "VALUES ('"+phone+"', '"+href+"', '"+businessId+"', '"+cityId+"', '"+tag+"', '"+status+"', now(), now(), "+"'"+remark+"') on DUPLICATE key update `url`='"+href+"'," +
                     "`update_time`=now();";
             num = stmt.executeUpdate(sql);
+            stmt.close();
+        }catch(SQLException se){
+            // 处理 JDBC 错误
+//            se.printStackTrace();
+        }catch(Exception e){
+            // 处理 Class.forName 错误
+//            e.printStackTrace();
+        }finally{
+            // 关闭资源
+            try{
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }catch(SQLException se2){
+
+            }
+        }
+        return num;
+    }
+
+    public static int saveDataBatch(Connection conn, List<UserAccountPhone> list) {
+        Statement stmt = null;
+        int num = 0;
+        try{
+            // 执行查询
+            stmt = conn.createStatement();
+            StringBuilder sql = new StringBuilder("INSERT INTO `user_account_phone_test` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) VALUES ");
+            for(int i = 0; i < list.size(); i++){
+                UserAccountPhone phone = list.get(i);
+                sql.append("('"+phone.getPhone()+"', '"+phone.getUrl()+"', '"+phone.getBusinessId()+"', '"+phone.getCityId()+"', '"+phone.getTag()+"', '"+phone.getStatus()+"', now(), now(), "+"'"+phone.getRemark()+"')");
+                if(i != list.size()-1){
+                    sql.append(",");
+                }
+            }
+            sql.append(" on DUPLICATE key update `update_time`=now();");
+            num = stmt.executeUpdate(sql.toString());
             stmt.close();
         }catch(SQLException se){
             // 处理 JDBC 错误
