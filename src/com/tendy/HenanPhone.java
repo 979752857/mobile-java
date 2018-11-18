@@ -61,7 +61,9 @@ public class HenanPhone extends Phone{
             String remark = "";
             if(itemRule != null){
                 tag = itemRule.getTag();
-                remark = itemRule.getRemark();
+                Map<String, String> map = new HashMap<>();
+                map.put("tag", itemRule.getRemark());
+                remark = JsonMapper.toJson(map);
             }
             UserAccountPhone userAccountPhone = new UserAccountPhone();
             userAccountPhone.setPhone(phone);
@@ -78,10 +80,10 @@ public class HenanPhone extends Phone{
             int num = MySqlUtil.saveDataBatch(connection, list);
             if(num > 1){
                 setUpdateNum(getUpdateNum()+1);
-                System.out.println("list:"+list.size()+"   处理成功");
+                System.out.println("list:"+list.size()+"   处理成功    num:"+num);
             }else{
                 setFailNum(getFailNum()+1);
-                System.out.println("list:"+list.size()+"   处理失败");
+                System.out.println("list:"+list.size()+"   处理失败    num:"+num);
             }
         }
         MySqlUtil.closeConnection(connection);

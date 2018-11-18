@@ -51,7 +51,7 @@ public class MySqlUtil {
             // 执行查询
             stmt = conn.createStatement();
             String sql;
-            sql = "INSERT INTO `user_account_phone_test` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) " +
+            sql = "INSERT INTO `user_account_phone` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) " +
                     "VALUES ('"+phone+"', '"+href+"', '"+businessId+"', '"+cityId+"', '"+tag+"', '"+status+"', now(), now(), "+"'"+remark+"') on DUPLICATE key update `url`='"+href+"'," +
                     "`update_time`=now();";
             num = stmt.executeUpdate(sql);
@@ -81,7 +81,7 @@ public class MySqlUtil {
         try{
             // 执行查询
             stmt = conn.createStatement();
-            StringBuilder sql = new StringBuilder("INSERT INTO `user_account_phone_test` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) VALUES ");
+            StringBuilder sql = new StringBuilder("INSERT INTO `user_account_phone` (`phone`, `url`, `business_id`, `city_id`, `tag`, `status`, `create_time`, `update_time`, `remark`) VALUES ");
             for(int i = 0; i < list.size(); i++){
                 UserAccountPhone phone = list.get(i);
                 sql.append("('"+phone.getPhone()+"', '"+phone.getUrl()+"', '"+phone.getBusinessId()+"', '"+phone.getCityId()+"', '"+phone.getTag()+"', '"+phone.getStatus()+"', now(), now(), "+"'"+phone.getRemark()+"')");

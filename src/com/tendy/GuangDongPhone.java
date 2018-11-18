@@ -69,7 +69,9 @@ public class GuangDongPhone extends Phone {
             String remark = "";
             if(itemRule != null){
                 tag = itemRule.getTag();
-                remark = itemRule.getRemark();
+                Map<String, String> map = new HashMap<>();
+                map.put("tag", itemRule.getRemark());
+                remark = JsonMapper.toJson(map);
             }
             int num = MySqlUtil.saveData(connection, phone, href, getCityId(), getBusinessId(), "private", tag, remark);
             if(num > 1){
