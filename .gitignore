@@ -9,5 +9,6 @@
 /bin/
 /build/
 /classes/
+/META-INF/
 /src/com/tendy/DBConstants.java
 /out/

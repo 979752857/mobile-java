@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] arg) throws Exception {
         List<String> citys = new ArrayList<>();
-//        citys.add("nanyang");
+        citys.add("nanyang");
         citys.add("dongguan");
         runPhone(citys);
     }
