@@ -39,7 +39,7 @@ public class HttpConnectionUtil {
      *            请求发送内容
      * @return 返回内容
      */
-    public static String requestMethod(String requestType, String urlStr, String body) {
+    public static String requestMethod(String requestType, String urlStr, String body, Map<String, String> head) {
 
         // 是否有http正文提交
         boolean isDoInput = false;
@@ -66,6 +66,11 @@ public class HttpConnectionUtil {
             if (isDoInput) {
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setRequestProperty("Content-Length", String.valueOf(body.length()));
+                if(head != null){
+                    for(Map.Entry<String, String> entry : head.entrySet()){
+                        httpURLConnection.setRequestProperty(entry.getKey(), entry.getValue());
+                    }
+                }
             }
             // 设置是否从httpUrlConnection读入,默认情况下是true;
             httpURLConnection.setDoInput(true);

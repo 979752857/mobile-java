@@ -25,7 +25,7 @@ public class HenanPhone extends Phone{
         param.put("sumpage", "0");
         //134 35 36 37 38 39 50 51 52 57 58 59 82 83 84 87
 //        param.put("section", "138");
-        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, server, HttpConnectionUtil.convertStringParamter(param));
+        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, server, HttpConnectionUtil.convertStringParamter(param), null);
         result = result.trim();
         System.out.println(result);
         processHtmlAndHref(result, row);

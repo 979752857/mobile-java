@@ -33,7 +33,14 @@ public class GuangDongPhone extends Phone {
         param.put("hzhbjr", "SQD021782");
         param.put("recoempltel", "S121122007");
         param.put("newflow", "1");
-        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, url, HttpConnectionUtil.convertStringParamter(param));
+        Map<String, String> header = new HashMap<>();
+        header.put("Referer", "http://wap.gd.10086.cn/nwap/card/offlinesimcard/index.jsps?isdecrypt=1&hzhbjr=7755357a426555636f2f34484a59684a324c314d62413d3d&recoempltel=4f72482f364f33366c4d6436396c787939314e5370673d3d&city="+String.valueOf(getCityId())+"&substoreid=");
+        header.put("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1");
+        header.put("Host", "wap.gd.10086.cn");
+        header.put("Origin", "http://wap.gd.10086.cn");
+        header.put("Pragma", "no-cache");
+        header.put("X-Requested-With", "XMLHttpRequest");
+        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, url, HttpConnectionUtil.convertStringParamter(param), header);
         result = result.trim();
         processHtmlAndHref(result, row);
     }
