@@ -18,8 +18,8 @@ public class Main {
 
     public static void main(String[] arg) throws Exception {
         List<String> citys = new ArrayList<>();
-//        citys.add("nanyang");
-//        citys.add("dongguan");
+        citys.add("nanyang");
+        citys.add("dongguan");
         citys.add("guangzhou");
         runPhone(citys);
     }
@@ -60,7 +60,7 @@ public class Main {
         for(int i = phone.getPageStart(); i <= phone.getPageEnd(); i++){
             System.out.println(phone.getCityId()+"*********当前获取第"+i+"页数据,每页大小"+phone.getPageSize()+"***********");
             phone.execute(i);
-            System.out.println(phone.getCityId()+"*********第"+i+"页数据处理完毕,每页大小"+phone.getPageSize()+"   成功数："+phone.getSuccessNum()+"   更新数："+
+            System.out.println(TimeUtil.formatDate(new Date(), "HH:mm:ss") + "*****" + phone.getCityId()+"*********第"+i+"页数据处理完毕,每页大小"+phone.getPageSize()+"   成功数："+phone.getSuccessNum()+"   更新数："+
                     phone.getUpdateNum()+"   失败数："+phone.getFailNum()+"   ***********");
             Random random = new Random();
             int sleep = random.nextInt(20)*1000 + 8000;

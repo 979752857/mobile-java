@@ -20,7 +20,7 @@ public class GuangDongPhone extends Phone {
 
     @Override
     public void execute(Integer pageStart) {
-        getPhoneAndHref(pageStart, pageStart*getPageSize());
+        getPhoneAndHref(pageStart, (pageStart-1)*getPageSize());
     }
 
     public void getPhoneAndHref(Integer pageNo, int row){
