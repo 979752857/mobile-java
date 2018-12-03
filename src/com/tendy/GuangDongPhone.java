@@ -1,7 +1,9 @@
 package com.tendy;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +54,7 @@ public class GuangDongPhone extends Phone {
         int indexHrefAfterLength = "class=\"numberpaybtn\"".length();
 
         Connection connection = MySqlUtil.getConnect();
+        List<String> phones = new ArrayList<>();
         while(true){
             int index = result.indexOf("<span class=\"text_red\">");
             int indexHrefBefore = result.indexOf("<td><a href=");
@@ -91,8 +94,10 @@ public class GuangDongPhone extends Phone {
                 setFailNum(getFailNum()+1);
                 System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   处理失败");
             }
+            phones.add(phone);
             row++;
         }
+        SendAlertUtil.checkAndSendAlert(getCityId(), phones);
         MySqlUtil.closeConnection(connection);
     }
 }

@@ -82,8 +82,10 @@ public class HttpConnectionUtil {
             httpURLConnection.setUseCaches(false);
             // 设置字符编码
             httpURLConnection.setRequestProperty("Accept-Charset", CHARSET_UTF_8);
-            // 设置内容类型
-            httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE_FORM_URL);
+            if(httpURLConnection.getRequestProperty("Content-Type") == null){
+                // 设置内容类型
+                httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE_FORM_URL);
+            }
             // 设定请求的方法,默认是GET
             httpURLConnection.setRequestMethod(requestType);
 

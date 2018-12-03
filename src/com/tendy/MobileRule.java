@@ -39,4 +39,43 @@ public class MobileRule {
         }
         return null;
     }
+
+    public static boolean isMatch(String str, String key){
+        if(str == null || "".equals(str) || key == null || "".equals(key)){
+            return false;
+        }
+        boolean positionHead = false;
+        boolean positionTail = false;
+        if(key.indexOf("%") == 0){
+            positionHead = true;
+            key = key.substring(1);
+        }
+        if(key.indexOf("%") > 0){
+            positionTail = true;
+        }
+        key = key.replace("%", "");
+        if(str.length() < key.length()){
+            return false;
+        }
+        if(!positionHead && !positionTail){
+            if(str.equals(key)){
+                return true;
+            }
+        }
+        if(!positionHead){
+            if(str.indexOf(key) != 0){
+                return false;
+            }
+        }
+        if(!positionTail){
+            if(!str.substring(str.length()-key.length(), str.length()).equals(key)){
+                return false;
+            }
+        }
+        if(str.contains(key)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

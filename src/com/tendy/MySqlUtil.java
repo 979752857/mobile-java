@@ -2,9 +2,13 @@ package com.tendy;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: tendy
@@ -109,5 +113,47 @@ public class MySqlUtil {
             }
         }
         return num;
+    }
+
+    public static Map<Integer, List<Map<String,String>>> getAlertConfig(Connection conn) {
+        Map<Integer, List<Map<String,String>>> cityMap = new HashMap<>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try{
+            stmt = conn.createStatement();
+            String sql = "select id,city_id,tag,contains_key,send_alert from phone_alert_config where status = 'online'";
+            rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int city_id = rs.getInt("city_id");
+                String tag = rs.getString("tag");
+                String contains_key = rs.getString("contains_key");
+                String send_alert = rs.getString("send_alert");
+                Map<String, String> item = new HashMap<>();
+                item.put("cityId", String.valueOf(city_id));
+                item.put("id", String.valueOf(id));
+                item.put("tag", tag);
+                item.put("key", contains_key);
+                item.put("send", send_alert);
+                List<Map<String, String>> list = cityMap.get(city_id);
+                if(list == null){
+                    list = new ArrayList<>();
+                }
+                list.add(item);
+                cityMap.put(city_id, list);
+            }
+            stmt.close();
+        }catch(Exception e){
+
+        }finally{
+            try{
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }catch(SQLException se2){
+
+            }
+        }
+        return cityMap;
     }
 }

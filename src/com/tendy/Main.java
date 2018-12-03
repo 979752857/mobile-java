@@ -1,7 +1,12 @@
 package com.tendy;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Main {
 
@@ -35,6 +40,7 @@ public class Main {
                 Thread.sleep(1000*60*5);
                 continue;
             }
+            SendAlertUtil.init();
             if(citys.contains("nanyang")){
                 Integer cityId = cityMap.get("nanyang");
                 Phone nanyang = new HenanPhone(20, 1, 1, cityId, busMap.get(String.valueOf(cityId)));

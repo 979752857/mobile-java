@@ -85,6 +85,13 @@ public class HenanPhone extends Phone{
                 setFailNum(getFailNum()+1);
                 System.out.println("list:"+list.size()+"   处理失败    num:"+num);
             }
+
+            //发送通知
+            List<String> phones = new ArrayList<>();
+            for(UserAccountPhone phone : list){
+                phones.add(phone.getPhone());
+            }
+            SendAlertUtil.checkAndSendAlert(getCityId(), phones);
         }
         MySqlUtil.closeConnection(connection);
     }
