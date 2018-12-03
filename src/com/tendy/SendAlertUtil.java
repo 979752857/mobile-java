@@ -1,9 +1,13 @@
 package com.tendy;
 
+import com.tendy.model.ItemRule;
 import com.tendy.model.SendIM;
 
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +54,11 @@ public class SendAlertUtil {
             if(entry.getValue() == null || entry.getValue().size() == 0){
                 continue;
             }
-            sendIm(entry.getKey(), entry.getValue());
             try {
+                sendIm(entry.getKey(), entry.getValue());
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -86,8 +90,15 @@ public class SendAlertUtil {
         return null;
     }
 
-    public static void sendIm(String send, List<SendIM> list){
+    public static void sendIm(String send, List<SendIM> list) throws ParseException {
         if(send == null || "".equals(send) || list == null || list.size() == 0){
+            return;
+        }
+        String format = "HH:mm:ss";
+        Date nowTime = new SimpleDateFormat(format).parse(TimeUtil.formatDate(new Date(), format));
+        Date startTime = new SimpleDateFormat(format).parse("08:00:00");
+        Date endTime = new SimpleDateFormat(format).parse("22:00:00");
+        if(!TimeUtil.isEffectiveDate(nowTime, startTime, endTime)){
             return;
         }
         StringBuilder body = new StringBuilder("{\"msgtype\":\"text\",\"text\":{\"content\":\"");

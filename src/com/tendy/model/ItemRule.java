@@ -1,4 +1,4 @@
-package com.tendy;
+package com.tendy.model;
 
 public class ItemRule {
     private String pattern;

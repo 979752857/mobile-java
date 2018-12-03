@@ -1,5 +1,7 @@
 package com.tendy;
 
+import com.tendy.model.ItemRule;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
