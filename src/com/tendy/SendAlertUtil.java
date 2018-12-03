@@ -112,7 +112,7 @@ public class SendAlertUtil {
             }
         }
         body.append("请及时在系统中查询！");
-        body.append("\"},\"at\":{\"isAtAll\":true}}");
+        body.append("\"},\"at\":{\"isAtAll\":false}}");
         Map<String,String> head = new HashMap<>();
         head.put("Content-Type", "application/json;charset=utf-8");
         String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, send, body.toString(), head);
