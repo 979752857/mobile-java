@@ -16,10 +16,9 @@ import java.util.Map;
 public class GuangDongPhone extends Phone {
 
     private String server = "http://wap.gd.10086.cn";
-    private String url = "http://wap.gd.10086.cn/nwap/card/cardSearch/cardlist.jsps";
 
-    public GuangDongPhone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId) {
-        super(pageSize, pageStart, pageEnd, cityId, businessId);
+    public GuangDongPhone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId, String url, String urlParam) {
+        super(pageSize, pageStart, pageEnd, cityId, businessId, url, urlParam);
     }
 
     @Override
@@ -28,7 +27,6 @@ public class GuangDongPhone extends Phone {
     }
 
     public void getPhoneAndHref(Integer pageNo, int row){
-
         Map<String, String> param = new HashMap<>();
         param.put("city", String.valueOf(getCityId()));
         param.put("pageNo", String.valueOf(pageNo));
@@ -38,13 +36,18 @@ public class GuangDongPhone extends Phone {
         param.put("recoempltel", "S121122007");
         param.put("newflow", "1");
         Map<String, String> header = new HashMap<>();
-        header.put("Referer", "http://wap.gd.10086.cn/nwap/card/offlinesimcard/index.jsps?isdecrypt=1&hzhbjr=7755357a426555636f2f34484a59684a324c314d62413d3d&recoempltel=4f72482f364f33366c4d6436396c787939314e5370673d3d&city="+String.valueOf(getCityId())+"&substoreid=");
         header.put("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1");
         header.put("Host", "wap.gd.10086.cn");
         header.put("Origin", "http://wap.gd.10086.cn");
         header.put("Pragma", "no-cache");
         header.put("X-Requested-With", "XMLHttpRequest");
-        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, url, HttpConnectionUtil.convertStringParamter(param), header);
+        if(getUrlParam() != null && getUrlParam() != ""){
+            Map<String, Object> urlMap = JsonMapper.json2Map(getUrlParam());
+            for(Map.Entry<String, Object> entry : urlMap.entrySet()){
+                header.put(entry.getKey(), String.valueOf(entry.getValue()));
+            }
+        }
+        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, getUrl(), HttpConnectionUtil.convertStringParamter(param), header);
         result = result.trim();
         processHtmlAndHref(result, row);
     }

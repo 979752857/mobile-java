@@ -16,13 +16,11 @@ public class SendAlertUtil {
 
     private static Map<Integer, List<Map<String, String>>> cityMap = new HashMap<>();
 
-    public static void init(){
-        Connection connection = MySqlUtil.getConnect();
+    public static void init(Connection connection){
         cityMap = MySqlUtil.getAlertConfig(connection);
         if(cityMap == null){
             cityMap = new HashMap<>();
         }
-        MySqlUtil.closeConnection(connection);
     }
 
     public static void checkAndSendAlert(Integer cityId, List<String> phones) {

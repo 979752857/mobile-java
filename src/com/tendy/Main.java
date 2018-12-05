@@ -1,5 +1,8 @@
 package com.tendy;
 
+import com.tendy.model.MobileSpiderConfig;
+
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,26 +13,11 @@ import java.util.Random;
 
 public class Main {
 
-    private static Map<String, Integer> busMap = new HashMap<>();
-    private static Map<String, Integer> cityMap = new HashMap<>();
-    static{
-        busMap.put("200", 3);
-        cityMap.put("guangzhou", 200);
-        busMap.put("769", 2);
-        cityMap.put("dongguan", 769);
-        busMap.put("377", 1);
-        cityMap.put("nanyang", 377);
-    }
-
     public static void main(String[] arg) throws Exception {
-        List<String> citys = new ArrayList<>();
-        citys.add("nanyang");
-        citys.add("dongguan");
-        citys.add("guangzhou");
-        runPhone(citys);
+        runPhone();
     }
 
-    public static void runPhone(List<String> citys) throws Exception {
+    public static void runPhone() throws Exception {
         while(true){
             String format = "HH:mm:ss";
             Date nowTime = new SimpleDateFormat(format).parse(TimeUtil.formatDate(new Date(), format));
@@ -40,24 +28,37 @@ public class Main {
                 Thread.sleep(1000*60*5);
                 continue;
             }
-            SendAlertUtil.init();
-            if(citys.contains("nanyang")){
-                Integer cityId = cityMap.get("nanyang");
-                Phone nanyang = new HenanPhone(20, 1, 1, cityId, busMap.get(String.valueOf(cityId)));
-                phoneProcess(nanyang);
-                Thread.sleep(1000*60*3);
+            Connection connection = MySqlUtil.getConnect();
+            SendAlertUtil.init(connection);
+            List<MobileSpiderConfig> list = MySqlUtil.getMobileSpiderConfig(connection);
+            if(list == null){
+                list = new ArrayList<>();
             }
-            if(citys.contains("dongguan")){
-                Integer cityId = cityMap.get("dongguan");
-                Phone dongguan = new GuangDongPhone(10, 1, 10, cityId, busMap.get(String.valueOf(cityId)));
-                phoneProcess(dongguan);
-                Thread.sleep(1000*60*10);
-            }
-            if(citys.contains("guangzhou")){
-                Integer cityId = cityMap.get("guangzhou");
-                Phone guangzhou = new GuangDongPhone(10, 1, 10, cityId, busMap.get(String.valueOf(cityId)));
-                phoneProcess(guangzhou);
-                Thread.sleep(1000*60*10);
+            MySqlUtil.closeConnection(connection);
+            for(MobileSpiderConfig config : list){
+                Map<String, Object> paramMap = JsonMapper.json2Map(config.getMethodParam());
+                Map<String, Object> configMap = JsonMapper.json2Map(config.getConfig());
+                if("henan".equals(config.getProvince())){
+                    Phone henan = new HenanPhone(Integer.valueOf(String.valueOf(paramMap.get("pageSize"))), Integer.valueOf(String.valueOf(paramMap.get("pageStart"))),
+                            Integer.valueOf(String.valueOf(paramMap.get("pageEnd"))), Integer.valueOf(String.valueOf(paramMap.get("cityId"))),
+                            Integer.valueOf(String.valueOf(paramMap.get("businessId"))), config.getUrl(), config.getUrlParam());
+                    phoneProcess(henan);
+                    if(configMap.get("sleep_second") != null){
+                        Thread.sleep(1000*Integer.valueOf(String.valueOf(configMap.get("sleep_second"))));
+                    }else{
+                        Thread.sleep(1000*60*3);
+                    }
+                }else if("guangdong".equals(config.getProvince())){
+                    Phone guangdong = new GuangDongPhone(Integer.valueOf(String.valueOf(paramMap.get("pageSize"))), Integer.valueOf(String.valueOf(paramMap.get("pageStart"))),
+                            Integer.valueOf(String.valueOf(paramMap.get("pageEnd"))), Integer.valueOf(String.valueOf(paramMap.get("cityId"))),
+                            Integer.valueOf(String.valueOf(paramMap.get("businessId"))), config.getUrl(), config.getUrlParam());
+                    phoneProcess(guangdong);
+                    if(configMap.get("sleep_second") != null){
+                        Thread.sleep(1000*Integer.valueOf(String.valueOf(configMap.get("sleep_second"))));
+                    }else{
+                        Thread.sleep(1000*60*10);
+                    }
+                }
             }
         }
     }

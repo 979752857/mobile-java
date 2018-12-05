@@ -15,19 +15,19 @@ import java.util.Map;
  */
 public class HenanPhone extends Phone{
 
-    private static String server = "http://wap.ha.10086.cn/pay/card-sale!toforward.action?url=card&mealid=&mastercard=&plancode=&iccid=";
-
-    public HenanPhone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId) {
-        super(pageSize, pageStart, pageEnd, cityId, businessId);
+    public HenanPhone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId, String url, String urlParam) {
+        super(pageSize, pageStart, pageEnd, cityId, businessId, url, urlParam);
     }
 
     public void getPhoneAndHref(int row) throws InterruptedException {
         Map<String, String> param = new HashMap<>();
-        param.put("queryRegion", "R");
-        param.put("sumpage", "0");
-        //134 35 36 37 38 39 50 51 52 57 58 59 82 83 84 87
-//        param.put("section", "138");
-        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, server, HttpConnectionUtil.convertStringParamter(param), null);
+        if(getUrlParam() != null && getUrlParam() != ""){
+            Map<String, Object> urlMap = JsonMapper.json2Map(getUrlParam());
+            for(Map.Entry<String, Object> entry : urlMap.entrySet()){
+                param.put(entry.getKey(), String.valueOf(entry.getValue()));
+            }
+        }
+        String result = HttpConnectionUtil.requestMethod(HttpConnectionUtil.HTTP_POST, getUrl(), HttpConnectionUtil.convertStringParamter(param), null);
         result = result.trim();
         System.out.println(result);
         processHtmlAndHref(result, row);

@@ -1,5 +1,7 @@
 package com.tendy;
 
+import com.tendy.model.MobileSpiderConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -155,5 +157,39 @@ public class MySqlUtil {
             }
         }
         return cityMap;
+    }
+
+    public static List<MobileSpiderConfig> getMobileSpiderConfig(Connection conn) {
+        List<MobileSpiderConfig> list = new ArrayList<>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try{
+            stmt = conn.createStatement();
+            String sql = "select province,url,method_param,type,url_param,config,remark from mobile_spider_config where status = 'online'";
+            rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                MobileSpiderConfig config = new MobileSpiderConfig();
+                config.setProvince(rs.getString("province"));
+                config.setUrl(rs.getString("url"));
+                config.setMethodParam(rs.getString("method_param"));
+                config.setType(rs.getString("type"));
+                config.setUrlParam(rs.getString("url_param"));
+                config.setConfig(rs.getString("config"));
+                config.setRemark(rs.getString("remark"));
+                list.add(config);
+            }
+            stmt.close();
+        }catch(Exception e){
+
+        }finally{
+            try{
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }catch(SQLException se2){
+
+            }
+        }
+        return list;
     }
 }

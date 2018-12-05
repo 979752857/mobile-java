@@ -10,13 +10,17 @@ public abstract class Phone {
     private Integer failNum = null;
     private Integer cityId = null;
     private Integer businessId = null;
+    private String url = null;
+    private String urlParam = null;
 
-    public Phone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId) {
+    public Phone(Integer pageSize, Integer pageStart, Integer pageEnd, Integer cityId, Integer businessId, String url, String urlParam) {
         this.pageSize = pageSize;
         this.pageStart = pageStart;
         this.pageEnd = pageEnd;
         this.cityId = cityId;
         this.businessId = businessId;
+        this.url = url;
+        this.urlParam = urlParam;
         this.successNum = 0;
         this.updateNum = 0;
         this.failNum = 0;
@@ -86,5 +90,21 @@ public abstract class Phone {
 
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrlParam() {
+        return urlParam;
+    }
+
+    public void setUrlParam(String urlParam) {
+        this.urlParam = urlParam;
     }
 }
