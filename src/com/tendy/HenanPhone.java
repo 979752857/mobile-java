@@ -76,16 +76,16 @@ public class HenanPhone extends Phone{
             userAccountPhone.setTag(tag);
             userAccountPhone.setRemark(remark);
             list.add(userAccountPhone);
-            System.out.println(phone + "   plancode:" + plancode + "    row:"+row+"   放入list");
+            System.out.println(phone + "   plancode:" + plancode + "    row:"+row+"   put the list");
         }
         if(list != null && list.size() > 0){
             int num = MySqlUtil.saveDataBatch(connection, list);
             if(num > 1){
                 setUpdateNum(getUpdateNum()+1);
-                System.out.println("list:"+list.size()+"   处理成功    num:"+num);
+                System.out.println("list:"+list.size()+"   process success    num:"+num);
             }else{
                 setFailNum(getFailNum()+1);
-                System.out.println("list:"+list.size()+"   处理失败    num:"+num);
+                System.out.println("list:"+list.size()+"   process fail    num:"+num);
             }
 
             //发送通知

@@ -4,12 +4,7 @@ import com.tendy.model.MobileSpiderConfig;
 
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
 
@@ -24,7 +19,7 @@ public class Main {
             Date startTime = new SimpleDateFormat(format).parse("06:30:00");
             Date endTime = new SimpleDateFormat(format).parse("23:00:00");
             if(!TimeUtil.isEffectiveDate(nowTime, startTime, endTime)){
-                System.out.println(TimeUtil.formatDate(new Date(), format)+"********不在时间范围内");
+                System.out.println(TimeUtil.formatDate(new Date(), format)+"******** not the time range");
                 Thread.sleep(1000*60*5);
                 continue;
             }
@@ -65,10 +60,10 @@ public class Main {
 
     public static void phoneProcess(Phone phone) throws Exception {
         for(int i = phone.getPageStart(); i <= phone.getPageEnd(); i++){
-            System.out.println(phone.getCityId()+"*********当前获取第"+i+"页数据,每页大小"+phone.getPageSize()+"***********");
+            System.out.println(phone.getCityId()+"*********process the "+i+" page data, page size:"+phone.getPageSize()+"***********");
             phone.execute(i);
-            System.out.println(TimeUtil.formatDate(new Date(), "HH:mm:ss") + "*****" + phone.getCityId()+"*********第"+i+"页数据处理完毕,每页大小"+phone.getPageSize()+"   成功数："+phone.getSuccessNum()+"   更新数："+
-                    phone.getUpdateNum()+"   失败数："+phone.getFailNum()+"   ***********");
+            System.out.println(TimeUtil.formatDate(new Date(), "HH:mm:ss") + "*****" + phone.getCityId()+"********* page data "+i+" was finished, page size:"+phone.getPageSize()+"   success："+phone.getSuccessNum()+"   update："+
+                    phone.getUpdateNum()+"   fail："+phone.getFailNum()+"   ***********");
             Random random = new Random();
             int sleep = random.nextInt(20)*1000 + 8000;
             Thread.sleep(sleep);

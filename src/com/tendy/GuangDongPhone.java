@@ -92,13 +92,13 @@ public class GuangDongPhone extends Phone {
             int num = MySqlUtil.saveData(connection, phone, href, getCityId(), getBusinessId(), "private", tag, remark);
             if(num > 1){
                 setUpdateNum(getUpdateNum()+1);
-                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   更新成功");
+                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   update success");
             }else if(num > 0){
                 setSuccessNum(getSuccessNum()+1);
-                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   处理成功");
+                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   process success");
             }else{
                 setFailNum(getFailNum()+1);
-                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+"   处理失败");
+                System.out.println(phone + "   href:" + href.substring(22) + "    row:"+row+ "   process fail");
             }
             phones.add(phone);
             row++;
