@@ -32,9 +32,10 @@ public class GuangDongPhone extends Phone {
         param.put("pageNo", String.valueOf(pageNo));
         param.put("pageSize", String.valueOf(getPageSize()));
         param.put("offLine", "1");
-        param.put("hzhbjr", "SQD021782");
-        param.put("recoempltel", "S121122007");
+        param.put("hzhbjr", "SCDG2C375");
+        param.put("recoempltel", "S2C3750001");
         param.put("newflow", "1");
+        param.put("defaultOpCode", "41");
         Map<String, String> header = new HashMap<>();
         header.put("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1");
         header.put("Host", "wap.gd.10086.cn");
